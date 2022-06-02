@@ -73,11 +73,11 @@ class _MyHomePageState extends State<MyHomePage> {
                 const Expanded(
                     child: ListTile(
                   leading: Icon(Icons.location_city),
-                  title: Text('Messages'),
+                  title: Text('Longessaigne'),
                 )),
                 IconButton(
                   onPressed: () {},
-                  icon: Icon(Icons.delete),
+                  icon: const Icon(Icons.delete),
                 )
               ],
             ),
