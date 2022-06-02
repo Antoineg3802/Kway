@@ -55,29 +55,31 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.all(40.0),
+                    padding: const EdgeInsets.all(40.0),
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         textStyle: const TextStyle(fontSize: 20),
                       ),
                       onPressed: () {},
-                      child: Text('Ajouter une ville'),
+                      child: const Text('Ajouter une ville'),
                     ),
                   )
                 ],
               ),
             ),
-            const ListTile(
-              leading: Icon(Icons.message),
-              title: Text('Messages'),
-            ),
-            const ListTile(
-              leading: Icon(Icons.account_circle),
-              title: Text('Profile'),
-            ),
-            const ListTile(
-              leading: Icon(Icons.settings),
-              title: Text('Settings'),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                const Expanded(
+                    child: ListTile(
+                  leading: Icon(Icons.location_city),
+                  title: Text('Messages'),
+                )),
+                IconButton(
+                  onPressed: () {},
+                  icon: Icon(Icons.delete),
+                )
+              ],
             ),
           ],
         ),
