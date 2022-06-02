@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 
 void main() {
@@ -38,28 +40,42 @@ class _MyHomePageState extends State<MyHomePage> {
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
-          children: const <Widget>[
+          children: <Widget>[
             DrawerHeader(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.blue,
               ),
-              child: Text(
-                'Drawer Header',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                ),
+              child: Column(
+                children: [
+                  const Text(
+                    'Mes villes',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(40.0),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        textStyle: const TextStyle(fontSize: 20),
+                      ),
+                      onPressed: () {},
+                      child: Text('Ajouter une ville'),
+                    ),
+                  )
+                ],
               ),
             ),
-            ListTile(
+            const ListTile(
               leading: Icon(Icons.message),
               title: Text('Messages'),
             ),
-            ListTile(
+            const ListTile(
               leading: Icon(Icons.account_circle),
               title: Text('Profile'),
             ),
-            ListTile(
+            const ListTile(
               leading: Icon(Icons.settings),
               title: Text('Settings'),
             ),
