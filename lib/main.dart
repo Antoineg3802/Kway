@@ -32,13 +32,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: const Center(
-        child: Text('test'),
-      ),
+    return const Scaffold(
+      body : null,
     );
   }
 }
