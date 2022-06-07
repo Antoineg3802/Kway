@@ -120,10 +120,15 @@ class _MyHomePageState extends State<MyHomePage> {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                const Expanded(
+                Expanded(
                     child: ListTile(
-                  leading: Icon(Icons.location_city),
-                  title: Text('Longessaigne'),
+                  leading: const Icon(Icons.location_city),
+                  title: TextButton(
+                    child: const Text('longessaigne'),
+                    onPressed: () => {
+                      // Quand la ville est séléctionné
+                    },
+                  ),
                 )),
                 IconButton(
                   onPressed: () {},
@@ -144,9 +149,6 @@ class _MyHomePageState extends State<MyHomePage> {
             return ListTile(
               title: Text(snapshot.data!.name.toString()),
               subtitle: Text(snapshot.data!.base.toString()),
-              // trailing:
-              //     Text(snapshot.data![index].probability.toString()),
-              // leading: Text(snapshot.data![index].count.toString()),
             );
           } else {
             return const Text("Une erreur est survenue, (code mieux)");
