@@ -14,7 +14,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
       ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
@@ -35,7 +34,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: const Text('Town'),
       ),
       //contiens tout ce qu'il y a dans l'hamburger bar
       drawer: Drawer(
@@ -119,24 +118,224 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       //Tout l'interieur du body (de la page d'acceuil)
-      body: FutureBuilder<City>(
-        future: getCityData('Lyon'),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: Text("Chargement..."));
-          } else if (snapshot.connectionState == ConnectionState.done) {
-            return ListTile(
-              title: Text(snapshot.data!.name.toString()),
-              subtitle: Text(snapshot.data!.base.toString()),
-              // trailing:
-              //     Text(snapshot.data![index].probability.toString()),
-              // leading: Text(snapshot.data![index].count.toString()),
-            );
-          } else {
-            return const Text("Une erreur est survenue, (code mieux)");
-          }
-        },
+      body: Container(
+        child: Column(
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  width: 350,
+                  height: 200,
+                  padding: const EdgeInsets.all(10.0),
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    color: Colors.blue[300],
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Row(
+                        children: [
+                          SizedBox(
+                            width: 149,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                crossAxisAlignment : CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  const Text(
+                                    'Day', 
+                                    style:TextStyle(color: Colors.white),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                  const Text(
+                                    'Date', 
+                                    style:TextStyle(color: Colors.white),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                  const Text(
+                                    'Hour', 
+                                    style:TextStyle(color: Colors.white),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                  Container(
+                                    margin: const EdgeInsets.only(left: 17.0, top: 17.0),
+                                    padding: const EdgeInsets.all(10.0),
+                                    width: 130,
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                      color: Colors.blue[300],
+                                      border: Border.all(
+                                        color: Colors.white,
+                                        width: 1,
+                                      ),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child : Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: <Widget>[
+                                        Image.network(
+                                          'https://cdn-icons-png.flaticon.com/512/1163/1163661.png',
+                                          width: 40.0,
+                                          height: 40.0,
+                                        ),
+                                        const Text(
+                                          'Weather',
+                                          style:TextStyle(color: Colors.white),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 149,
+                            child: Column(
+                              crossAxisAlignment : CrossAxisAlignment.center,
+                              mainAxisAlignment : MainAxisAlignment.center,
+                              children: const <Widget>[
+                                Text(
+                                  'XX.XX°', 
+                                  style:TextStyle(color: Colors.white,fontSize: 25),
+                                  textAlign: TextAlign.left,
+                                ),
+                                Text(
+                                  'Humidity : XX %', 
+                                  style:TextStyle(color: Colors.white),
+                                  textAlign: TextAlign.left,
+                                ),
+                                Text(
+                                  'Wind : XX.XX km/h', 
+                                  style:TextStyle(color: Colors.white),
+                                  textAlign: TextAlign.left,
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              children: <Widget>[
+                // Expanded(
+                //   child: ListView(
+                //   scrollDirection: Axis.horizontal,
+                //   shrinkWrap: true,
+                //   children: const <Widget>[
+                //     Card(
+                //       child : Text('Hour'),  
+                //     ),
+                //     Card(
+                //       child : Text('Hour'),  
+                //     ),
+                //     Card(
+                //       child : Text('Hour'),  
+                //     ),
+                //     Card(
+                //       child : Text('Hour'),  
+                //     ),
+                //     Card(
+                //       child : Text('Hour'),  
+                //     ),
+                //     Card(
+                //       child : Text('Hour'),  
+                //     ),
+                //     Card(
+                //       child : Text('Hour'),  
+                //     ),
+                //     Card(
+                //       child : Text('Hour'),  
+                //     ),
+                //     Card(
+                //       child : Text('Hour'),  
+                //     ),
+                //     Card(
+                //       child : Text('Hour'),  
+                //     ),
+                //     Card(
+                //       child : Text('Hour'),  
+                //     ),
+                //     Card(
+                //       child : Text('Hour'),  
+                //     ),
+                //     Card(
+                //       child : Text('Hour'),  
+                //     ),
+                //     Card(
+                //       child : Text('Hour'),  
+                //     ),
+                //   ],
+                // ),
+                // ),
+              ],
+            ),
+            Row(
+              children : <Widget>[
+                // ListView(
+                //   scrollDirection: Axis.horizontal,
+                //   children : const <Widget>[
+                    // Card(
+                    //   child : Text('Hour'),  
+                    // ),
+                    // Card(
+                    //   child : Text('Hour'),  
+                    // ),
+                    // Card(
+                    //   child : Text('Hour'),  
+                    // ),
+                    // Card(
+                    //   child : Text('Hour'),  
+                    // ),
+                    // Card(
+                    //   child : Text('Hour'),  
+                    // ),
+                    // Card(
+                    //   child : Text('Hour'),  
+                    // ),
+                    // Card(
+                    //   child : Text('Hour'),  
+                    // ),
+                    // Card(
+                    //   child : Text('Hour'),  
+                    // ),
+                    // Card(
+                    //   child : Text('Hour'),  
+                    // ),
+                    // Card(
+                    //   child : Text('Hour'),  
+                    // ),
+                    // Card(
+                    //   child : Text('Hour'),  
+                    // ),
+                    // Card(
+                    //   child : Text('Hour'),  
+                    // ),
+                    // Card(
+                    //   child : Text('Hour'),  
+                    // ),
+                    // Card(
+                    //   child : Text('Hour'),  
+                    // ),
+                  // ],
+                // ),
+              ]
+            ),
+          ],
+        ),
       ),
+        // decoration: const BoxDecoration(
+        //   image: DecorationImage(
+        //     image: AssetImage("assets/img/troll-face.png"),
+        //     fit: BoxFit.cover,
+        //   ),
+        // ), 
     );
   }
 }
