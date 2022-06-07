@@ -36,6 +36,13 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final _formKey = GlobalKey<FormState>();
   var cityName = TextEditingController();
+  final prefs = getAllData();
+  @override
+  void initState() {
+    getCountData();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -117,25 +124,65 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             //Une row contiens une ville stocker
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Expanded(
-                    child: ListTile(
-                  leading: const Icon(Icons.location_city),
-                  title: TextButton(
-                    child: const Text('longessaigne'),
-                    onPressed: () => {
-                      // Quand la ville est séléctionné
-                    },
-                  ),
-                )),
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.delete),
-                )
-              ],
+            FutureBuilder<List<String>>(
+              future: getAllData(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: Text("Chargement..."));
+                } else if (snapshot.connectionState == ConnectionState.done) {
+                  return ListView.builder(
+                      itemCount: lenght,
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        return Row(
+                          //     mainAxis: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Expanded(
+                                child: ListTile(
+                              leading: const Icon(Icons.location_city),
+                              title: TextButton(
+                                child: Text(snapshot.data![index]),
+                                onPressed: () => {
+                                  // Quand la ville est séléctionné
+                                },
+                              ),
+                            )),
+                            IconButton(
+                              onPressed: () {},
+                              icon: const Icon(Icons.delete),
+                            )
+                          ],
+                        );
+                        // return Row(
+
+                        // );
+                      });
+                } else {
+                  return const Text("Une erreur est survenue, (code mieux)");
+                }
+              },
             ),
+            // Row(
+            //   crossAxisAlignment: CrossAxisAlignment.start,
+            //   children: <Widget>[
+            //     Expanded(
+            //         child: ListTile(
+            //       leading: const Icon(Icons.location_city),
+            //       title: TextButton(
+            //         child: const Text('longessaigne'),
+            //         onPressed: () => {
+            //           // Quand la ville est séléctionné
+            //         },
+            //       ),
+            //     )),
+            //     IconButton(
+            //       onPressed: () {},
+            //       icon: const Icon(Icons.delete),
+            //     )
+            //   ],
+            // ),
           ],
         ),
       ),

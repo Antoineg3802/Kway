@@ -49,14 +49,28 @@ Future<void> writeData(String name) async {
   }
 }
 
-Future<void> deleteData(String name) async {
+// Future<void> deleteData(String name) async {
+//   final prefs = await SharedPreferences.getInstance();
+//   final List<String>? items = prefs.getStringList('Cities');
+//   if (items?.length != null) {
+//     for (int i = 0; i < items!.length; i++) {
+//       if (items![i] == name) {
+//         await prefs.remove('${items!.where((id) => id == name)}');
+//       }
+//     }
+//   }
+// }
+
+Future<List<String>> getAllData() async {
   final prefs = await SharedPreferences.getInstance();
   final List<String>? items = prefs.getStringList('Cities');
-  if (items?.length != null) {
-    for (int i = 0; i < items!.length; i++) {
-      if (items![i] == name) {
-        await prefs.remove('${items!.where((id) => id == name)}');
-      }
-    }
-  }
+  return items!.toList();
+}
+
+var lenght = 0;
+
+Future<void> getCountData() async {
+  final prefs = await SharedPreferences.getInstance();
+  var result = prefs.getStringList('Cities')!.length;
+  lenght = result.toInt();
 }
