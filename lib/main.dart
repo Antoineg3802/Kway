@@ -1,6 +1,8 @@
 import 'dart:html';
 
 import 'package:flutter/material.dart';
+import 'package:kway/models/city.dart';
+import 'package:kway/services/service_city.dart';
 
 void main() {
   runApp(const MyApp());
@@ -109,10 +111,23 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      body: const Center(
-        child: Drawer(),
-
-        // child: Text('test'),
+      body: FutureBuilder<City>(
+        future: getCityData(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: Text("Chargement..."));
+          } else if (snapshot.connectionState == ConnectionState.done) {
+            return ListTile(
+              title: Text(snapshot.data!.name.toString()),
+              subtitle: Text(snapshot.data!.base.toString()),
+              // trailing:
+              //     Text(snapshot.data![index].probability.toString()),
+              // leading: Text(snapshot.data![index].count.toString()),
+            );
+          } else {
+            return const Text("Une erreur est survenue, (code mieux)");
+          }
+        },
       ),
     );
   }
