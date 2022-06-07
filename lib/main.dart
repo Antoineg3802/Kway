@@ -99,7 +99,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                         child: Text("Submit"),
                                         onPressed: () {
                                           if (cityName.text != "") {
-                                            insertCity(cityName.text);
+                                            writeData(cityName.text);
                                           }
                                         },
                                       ),
