@@ -2,6 +2,7 @@ import 'dart:html';
 
 import 'package:flutter/material.dart';
 import 'package:kway/models/city.dart';
+import 'package:kway/bdd/bdd.dart';
 import 'package:kway/services/service_city.dart';
 
 void main() {
@@ -33,6 +34,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final _formKey = GlobalKey<FormState>();
+  var cityName = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,7 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(40.0),
+                    padding: const EdgeInsets.all(35.0),
                     //Le boutton pour ajouter une ville
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
@@ -80,22 +83,33 @@ class _MyHomePageState extends State<MyHomePage> {
                             textAlign: TextAlign.left,
                           ),
                           actions: <Widget>[
-                            //La bar pour ecrire dedans
-                            TextFormField(
-                              decoration: const InputDecoration(
-                                hintText: 'Entrer votre ville',
-                              ),
-                              validator: (String? value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter some text';
-                                }
-                                //ce qu'il se passe quand on écris quelque chose dans le text
-                                return null;
-                              },
-                            ),
+                            Form(
+                                key: _formKey,
+                                child: Column(
+                                  children: [
+                                    TextFormField(
+                                      decoration: const InputDecoration(
+                                        hintText: 'Entrer votre ville',
+                                      ),
+                                      controller: cityName,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: TextButton(
+                                        child: Text("Submit"),
+                                        onPressed: () {
+                                          if (cityName.text != "") {
+                                            insertCity(cityName.text);
+                                          }
+                                        },
+                                      ),
+                                    )
+                                  ],
+                                ))
                           ],
                         ),
                       ),
+
                       child: const Text('Ajouter une ville'),
                     ),
                   )
