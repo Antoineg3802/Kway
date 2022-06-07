@@ -4,6 +4,7 @@ import 'dart:html';
 import 'package:kway/models/city.dart';
 import 'package:http/http.dart' as http;
 
+//Fonction d'appel à l'api de la météo de paris
 Future<City> getCityData() async {
   var user;
   var url = Uri.parse(
@@ -12,7 +13,6 @@ Future<City> getCityData() async {
   if (response.statusCode == 200) {
     var jsonResponse = jsonDecode(response.body);
     user = City.fromJson(jsonResponse);
-    print(user);
   } else {
     print('Reponse fail with status methode : ${response.statusCode}');
   }

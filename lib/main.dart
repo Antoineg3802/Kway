@@ -39,16 +39,19 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
+      //contiens tout ce qu'il y a dans l'hamburger bar
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
+            //L'header du drawer
             DrawerHeader(
               decoration: const BoxDecoration(
                 color: Colors.blue,
               ),
               child: Column(
                 children: [
+                  //Le titre
                   const Text(
                     'Mes villes',
                     style: TextStyle(
@@ -58,12 +61,15 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   Padding(
                     padding: const EdgeInsets.all(40.0),
+                    //Le boutton pour ajouter une ville
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         textStyle: const TextStyle(fontSize: 20),
                       ),
+                      //Quand le bouton est presser
                       onPressed: () => showDialog<String>(
                         context: context,
+                        //Ouverture du bloc pour ecrire une ville et l'ajouter
                         builder: (BuildContext context) => AlertDialog(
                           title: const Text('Ajouter une ville'),
                           contentPadding:
@@ -74,6 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             textAlign: TextAlign.left,
                           ),
                           actions: <Widget>[
+                            //La bar pour ecrire dedans
                             TextFormField(
                               decoration: const InputDecoration(
                                 hintText: 'Entrer votre ville',
@@ -82,6 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 if (value == null || value.isEmpty) {
                                   return 'Please enter some text';
                                 }
+                                //ce qu'il se passe quand on écris quelque chose dans le text
                                 return null;
                               },
                             ),
@@ -94,6 +102,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
               ),
             ),
+            //Une row contiens une ville stocker
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -111,6 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
+      //Tout l'interieur du body (de la page d'acceuil)
       body: FutureBuilder<City>(
         future: getCityData(),
         builder: (context, snapshot) {
