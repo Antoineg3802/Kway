@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:kway/models/city.dart';
 import 'package:kway/services/service_city.dart';
@@ -122,7 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       //Tout l'interieur du body (de la page d'acceuil)
       body: FutureBuilder<City>(
-        future: getCityData(),
+        future: getCityData('Lyon'),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: Text("Chargement..."));
