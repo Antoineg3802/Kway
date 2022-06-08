@@ -43,6 +43,22 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
   }
 
+  void addCity() async {
+    setState(() {
+      if (cityName.text != "") {
+        writeData(cityName.text);
+        getCountData();
+      }
+    });
+  }
+
+  deleteCity(String name) async {
+    setState(() {
+      deleteData(name);
+      getCountData();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -104,11 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                       padding: const EdgeInsets.all(8.0),
                                       child: TextButton(
                                         child: Text("Submit"),
-                                        onPressed: () {
-                                          if (cityName.text != "") {
-                                            writeData(cityName.text);
-                                          }
-                                        },
+                                        onPressed: addCity,
                                       ),
                                     )
                                   ],
@@ -150,7 +162,9 @@ class _MyHomePageState extends State<MyHomePage> {
                               ),
                             )),
                             IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                deleteCity(snapshot.data![index]);
+                              },
                               icon: const Icon(Icons.delete),
                             )
                           ],

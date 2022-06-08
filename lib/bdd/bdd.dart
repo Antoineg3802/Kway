@@ -49,17 +49,21 @@ Future<void> writeData(String name) async {
   }
 }
 
-// Future<void> deleteData(String name) async {
-//   final prefs = await SharedPreferences.getInstance();
-//   final List<String>? items = prefs.getStringList('Cities');
-//   if (items?.length != null) {
-//     for (int i = 0; i < items!.length; i++) {
-//       if (items![i] == name) {
-//         await prefs.remove('${items!.where((id) => id == name)}');
-//       }
-//     }
-//   }
-// }
+Future<void> deleteData(String name) async {
+  print("demmarage da la fonciton");
+  final prefs = await SharedPreferences.getInstance();
+  final List<String>? items = prefs.getStringList('Cities') ?? [];
+  ;
+  if (items?.length != null) {
+    for (int i = 0; i < items!.length; i++) {
+      if (items[i] == name) {
+        items.removeWhere((item) => item == name);
+      }
+    }
+  }
+  prefs.setStringList('Cities', items!);
+  print("arret");
+}
 
 Future<List<String>> getAllData() async {
   final prefs = await SharedPreferences.getInstance();
