@@ -44,13 +44,11 @@ Future<void> writeData(String name) async {
     await prefs.setStringList('Cities', <String>[name]);
   } else {
     items.add(name);
-    print(items.toString());
     await prefs.setStringList('Cities', items);
   }
 }
 
 Future<void> deleteData(String name) async {
-  print("demmarage da la fonciton");
   final prefs = await SharedPreferences.getInstance();
   final List<String>? items = prefs.getStringList('Cities') ?? [];
   ;
@@ -62,7 +60,6 @@ Future<void> deleteData(String name) async {
     }
   }
   prefs.setStringList('Cities', items!);
-  print("arret");
 }
 
 Future<List<String>> getAllData() async {

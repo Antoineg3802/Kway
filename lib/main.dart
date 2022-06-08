@@ -59,6 +59,31 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void _delete(BuildContext context, String name) {
+    showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            title: const Text('Please Confirm'),
+            content: const Text('Are you sure to remove the city?'),
+            actions: [
+              // The "Yes" button
+              TextButton(
+                  onPressed: () {
+                    deleteCity(name);
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('Yes')),
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('No'))
+            ],
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -119,9 +144,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: TextButton(
-                                        child: Text("Submit"),
-                                        onPressed: addCity,
-                                      ),
+                                          child: Text("Submit"),
+                                          onPressed: () {
+                                            addCity();
+                                            Navigator.pop(context);
+                                          }),
                                     )
                                   ],
                                 ))
@@ -163,8 +190,10 @@ class _MyHomePageState extends State<MyHomePage> {
                             )),
                             IconButton(
                               onPressed: () {
-                                deleteCity(snapshot.data![index]);
+                                _delete(context, snapshot.data![index]);
                               },
+                              // deleteCity(snapshot.data![index]);
+                              //       Navigator.pop(context);
                               icon: const Icon(Icons.delete),
                             )
                           ],
@@ -178,25 +207,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 }
               },
             ),
-            // Row(
-            //   crossAxisAlignment: CrossAxisAlignment.start,
-            //   children: <Widget>[
-            //     Expanded(
-            //         child: ListTile(
-            //       leading: const Icon(Icons.location_city),
-            //       title: TextButton(
-            //         child: const Text('longessaigne'),
-            //         onPressed: () => {
-            //           // Quand la ville est séléctionné
-            //         },
-            //       ),
-            //     )),
-            //     IconButton(
-            //       onPressed: () {},
-            //       icon: const Icon(Icons.delete),
-            //     )
-            //   ],
-            // ),
           ],
         ),
       ),
