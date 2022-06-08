@@ -126,11 +126,8 @@ class _MyHomePageState extends State<MyHomePage> {
                           contentPadding:
                               const EdgeInsets.only(top: 25.0, left: 5.0),
                           buttonPadding: const EdgeInsets.all(5.0),
-                          content: const Text(
-                            "ville:",
-                            textAlign: TextAlign.left,
-                          ),
                           actions: <Widget>[
+                            //Tout le formulaire
                             Form(
                                 key: _formKey,
                                 child: Column(
@@ -155,7 +152,6 @@ class _MyHomePageState extends State<MyHomePage> {
                           ],
                         ),
                       ),
-
                       child: const Text('Ajouter une ville'),
                     ),
                   )
@@ -166,8 +162,10 @@ class _MyHomePageState extends State<MyHomePage> {
             FutureBuilder<List<String>>(
               future: getAllData(),
               builder: (context, snapshot) {
+                //Pendant que le chargement ce fait
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: Text("Chargement..."));
+                  //Une fois que le chargement est fini
                 } else if (snapshot.connectionState == ConnectionState.done) {
                   return ListView.builder(
                       itemCount: lenght,
@@ -175,7 +173,6 @@ class _MyHomePageState extends State<MyHomePage> {
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
                         return Row(
-                          //     mainAxis: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Expanded(
@@ -190,17 +187,13 @@ class _MyHomePageState extends State<MyHomePage> {
                             )),
                             IconButton(
                               onPressed: () {
+                                //Quand l'icon pour suprimer la ville est cliquer, il fait une confirmation
                                 _delete(context, snapshot.data![index]);
                               },
-                              // deleteCity(snapshot.data![index]);
-                              //       Navigator.pop(context);
                               icon: const Icon(Icons.delete),
                             )
                           ],
                         );
-                        // return Row(
-
-                        // );
                       });
                 } else {
                   return const Text("Une erreur est survenue, (code mieux)");
