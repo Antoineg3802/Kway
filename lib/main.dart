@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kway/models/city.dart';
+import 'package:kway/bdd/bdd.dart';
 import 'package:kway/services/service_city.dart';
 
 void main() {
@@ -13,8 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-      ),
+      theme: ThemeData(),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
@@ -30,6 +30,56 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final _formKey = GlobalKey<FormState>();
+  var cityName = TextEditingController();
+  final prefs = getAllData();
+  @override
+  void initState() {
+    getCountData();
+    super.initState();
+  }
+
+  void addCity() async {
+    setState(() {
+      if (cityName.text != "") {
+        writeData(cityName.text);
+        getCountData();
+      }
+    });
+  }
+
+  deleteCity(String name) async {
+    setState(() {
+      deleteData(name);
+      getCountData();
+    });
+  }
+
+  void _delete(BuildContext context, String name) {
+    showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            title: const Text('Please Confirm'),
+            content: const Text('Are you sure to remove the city?'),
+            actions: [
+              // The "Yes" button
+              TextButton(
+                  onPressed: () {
+                    deleteCity(name);
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('Yes')),
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('No'))
+            ],
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,7 +107,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(40.0),
+                    padding: const EdgeInsets.all(35.0),
                     //Le boutton pour ajouter une ville
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
@@ -72,24 +122,29 @@ class _MyHomePageState extends State<MyHomePage> {
                           contentPadding:
                               const EdgeInsets.only(top: 25.0, left: 5.0),
                           buttonPadding: const EdgeInsets.all(5.0),
-                          content: const Text(
-                            "ville:",
-                            textAlign: TextAlign.left,
-                          ),
                           actions: <Widget>[
-                            //La bar pour ecrire dedans
-                            TextFormField(
-                              decoration: const InputDecoration(
-                                hintText: 'Entrer votre ville',
-                              ),
-                              validator: (String? value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter some text';
-                                }
-                                //ce qu'il se passe quand on écris quelque chose dans le text
-                                return null;
-                              },
-                            ),
+                            //Tout le formulaire
+                            Form(
+                                key: _formKey,
+                                child: Column(
+                                  children: [
+                                    TextFormField(
+                                      decoration: const InputDecoration(
+                                        hintText: 'Entrer votre ville',
+                                      ),
+                                      controller: cityName,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: TextButton(
+                                          child: Text("Submit"),
+                                          onPressed: () {
+                                            addCity();
+                                            Navigator.pop(context);
+                                          }),
+                                    )
+                                  ],
+                                ))
                           ],
                         ),
                       ),
@@ -100,19 +155,46 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             //Une row contiens une ville stocker
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                const Expanded(
-                    child: ListTile(
-                  leading: Icon(Icons.location_city),
-                  title: Text('Longessaigne'),
-                )),
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.delete),
-                )
-              ],
+            FutureBuilder<List<String>>(
+              future: getAllData(),
+              builder: (context, snapshot) {
+                //Pendant que le chargement ce fait
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: Text("Chargement..."));
+                  //Une fois que le chargement est fini
+                } else if (snapshot.connectionState == ConnectionState.done) {
+                  return ListView.builder(
+                      itemCount: lenght,
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        return Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Expanded(
+                                child: ListTile(
+                              leading: const Icon(Icons.location_city),
+                              title: TextButton(
+                                child: Text(snapshot.data![index]),
+                                onPressed: () => {
+                                  // Quand la ville est séléctionné
+                                },
+                              ),
+                            )),
+                            IconButton(
+                              onPressed: () {
+                                //Quand l'icon pour suprimer la ville est cliquer, il fait une confirmation
+                                _delete(context, snapshot.data![index]);
+                              },
+                              icon: const Icon(Icons.delete),
+                            )
+                          ],
+                        );
+                      });
+                } else {
+                  return const Text("Une erreur est survenue, (code mieux)");
+                }
+              },
             ),
           ],
         ),
@@ -142,25 +224,26 @@ class _MyHomePageState extends State<MyHomePage> {
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Column(
-                                crossAxisAlignment : CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   const Text(
-                                    'Day', 
-                                    style:TextStyle(color: Colors.white),
+                                    'Day',
+                                    style: TextStyle(color: Colors.white),
                                     textAlign: TextAlign.left,
                                   ),
                                   const Text(
-                                    'Date', 
-                                    style:TextStyle(color: Colors.white),
+                                    'Date',
+                                    style: TextStyle(color: Colors.white),
                                     textAlign: TextAlign.left,
                                   ),
                                   const Text(
-                                    'Hour', 
-                                    style:TextStyle(color: Colors.white),
+                                    'Hour',
+                                    style: TextStyle(color: Colors.white),
                                     textAlign: TextAlign.left,
                                   ),
                                   Container(
-                                    margin: const EdgeInsets.only(left: 17.0, top: 17.0),
+                                    margin: const EdgeInsets.only(
+                                        left: 17.0, top: 17.0),
                                     padding: const EdgeInsets.all(10.0),
                                     width: 130,
                                     height: 50,
@@ -172,8 +255,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                       ),
                                       borderRadius: BorderRadius.circular(10),
                                     ),
-                                    child : Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
                                       children: <Widget>[
                                         Image.network(
                                           'https://cdn-icons-png.flaticon.com/512/1163/1163661.png',
@@ -182,7 +266,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                         ),
                                         const Text(
                                           'Weather',
-                                          style:TextStyle(color: Colors.white),
+                                          style: TextStyle(color: Colors.white),
                                         ),
                                       ],
                                     ),
@@ -194,22 +278,23 @@ class _MyHomePageState extends State<MyHomePage> {
                           SizedBox(
                             width: 149,
                             child: Column(
-                              crossAxisAlignment : CrossAxisAlignment.center,
-                              mainAxisAlignment : MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: const <Widget>[
                                 Text(
-                                  'XX.XX°', 
-                                  style:TextStyle(color: Colors.white,fontSize: 25),
+                                  'XX.XX°',
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 25),
                                   textAlign: TextAlign.left,
                                 ),
                                 Text(
-                                  'Humidity : XX %', 
-                                  style:TextStyle(color: Colors.white),
+                                  'Humidity : XX %',
+                                  style: TextStyle(color: Colors.white),
                                   textAlign: TextAlign.left,
                                 ),
                                 Text(
-                                  'Wind : XX.XX km/h', 
-                                  style:TextStyle(color: Colors.white),
+                                  'Wind : XX.XX km/h',
+                                  style: TextStyle(color: Colors.white),
                                   textAlign: TextAlign.left,
                                 ),
                               ],
@@ -230,112 +315,110 @@ class _MyHomePageState extends State<MyHomePage> {
                 //   shrinkWrap: true,
                 //   children: const <Widget>[
                 //     Card(
-                //       child : Text('Hour'),  
+                //       child : Text('Hour'),
                 //     ),
                 //     Card(
-                //       child : Text('Hour'),  
+                //       child : Text('Hour'),
                 //     ),
                 //     Card(
-                //       child : Text('Hour'),  
+                //       child : Text('Hour'),
                 //     ),
                 //     Card(
-                //       child : Text('Hour'),  
+                //       child : Text('Hour'),
                 //     ),
                 //     Card(
-                //       child : Text('Hour'),  
+                //       child : Text('Hour'),
                 //     ),
                 //     Card(
-                //       child : Text('Hour'),  
+                //       child : Text('Hour'),
                 //     ),
                 //     Card(
-                //       child : Text('Hour'),  
+                //       child : Text('Hour'),
                 //     ),
                 //     Card(
-                //       child : Text('Hour'),  
+                //       child : Text('Hour'),
                 //     ),
                 //     Card(
-                //       child : Text('Hour'),  
+                //       child : Text('Hour'),
                 //     ),
                 //     Card(
-                //       child : Text('Hour'),  
+                //       child : Text('Hour'),
                 //     ),
                 //     Card(
-                //       child : Text('Hour'),  
+                //       child : Text('Hour'),
                 //     ),
                 //     Card(
-                //       child : Text('Hour'),  
+                //       child : Text('Hour'),
                 //     ),
                 //     Card(
-                //       child : Text('Hour'),  
+                //       child : Text('Hour'),
                 //     ),
                 //     Card(
-                //       child : Text('Hour'),  
+                //       child : Text('Hour'),
                 //     ),
                 //   ],
                 // ),
                 // ),
               ],
             ),
-            Row(
-              children : <Widget>[
-                // ListView(
-                //   scrollDirection: Axis.horizontal,
-                //   children : const <Widget>[
-                    // Card(
-                    //   child : Text('Hour'),  
-                    // ),
-                    // Card(
-                    //   child : Text('Hour'),  
-                    // ),
-                    // Card(
-                    //   child : Text('Hour'),  
-                    // ),
-                    // Card(
-                    //   child : Text('Hour'),  
-                    // ),
-                    // Card(
-                    //   child : Text('Hour'),  
-                    // ),
-                    // Card(
-                    //   child : Text('Hour'),  
-                    // ),
-                    // Card(
-                    //   child : Text('Hour'),  
-                    // ),
-                    // Card(
-                    //   child : Text('Hour'),  
-                    // ),
-                    // Card(
-                    //   child : Text('Hour'),  
-                    // ),
-                    // Card(
-                    //   child : Text('Hour'),  
-                    // ),
-                    // Card(
-                    //   child : Text('Hour'),  
-                    // ),
-                    // Card(
-                    //   child : Text('Hour'),  
-                    // ),
-                    // Card(
-                    //   child : Text('Hour'),  
-                    // ),
-                    // Card(
-                    //   child : Text('Hour'),  
-                    // ),
-                  // ],
-                // ),
-              ]
-            ),
+            Row(children: <Widget>[
+              // ListView(
+              //   scrollDirection: Axis.horizontal,
+              //   children : const <Widget>[
+              // Card(
+              //   child : Text('Hour'),
+              // ),
+              // Card(
+              //   child : Text('Hour'),
+              // ),
+              // Card(
+              //   child : Text('Hour'),
+              // ),
+              // Card(
+              //   child : Text('Hour'),
+              // ),
+              // Card(
+              //   child : Text('Hour'),
+              // ),
+              // Card(
+              //   child : Text('Hour'),
+              // ),
+              // Card(
+              //   child : Text('Hour'),
+              // ),
+              // Card(
+              //   child : Text('Hour'),
+              // ),
+              // Card(
+              //   child : Text('Hour'),
+              // ),
+              // Card(
+              //   child : Text('Hour'),
+              // ),
+              // Card(
+              //   child : Text('Hour'),
+              // ),
+              // Card(
+              //   child : Text('Hour'),
+              // ),
+              // Card(
+              //   child : Text('Hour'),
+              // ),
+              // Card(
+              //   child : Text('Hour'),
+              // ),
+              // ],
+              // ),
+            ]),
           ],
         ),
       ),
-        // decoration: const BoxDecoration(
-        //   image: DecorationImage(
-        //     image: AssetImage("assets/img/troll-face.png"),
-        //     fit: BoxFit.cover,
-        //   ),
-        // ), 
+      // decoration: const BoxDecoration(
+      //   image: DecorationImage(
+      //     image: AssetImage("assets/img/troll-face.png"),
+      //     fit: BoxFit.cover,
+      //   ),
+      // ),
     );
   }
 }
