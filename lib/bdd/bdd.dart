@@ -36,12 +36,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 //     conflictAlgorithm: ConflictAlgorithm.replace,
 //   );
 // }
+var lengthCityList = 0;
 
 Future<void> writeData(String name) async {
   final prefs = await SharedPreferences.getInstance();
   final List<String>? items = prefs.getStringList('Cities');
   if (items == null) {
     await prefs.setStringList('Cities', <String>[name]);
+    lengthCityList++;
   } else {
     items.add(name);
     await prefs.setStringList('Cities', items);
@@ -65,13 +67,18 @@ Future<void> deleteData(String name) async {
 Future<List<String>> getAllData() async {
   final prefs = await SharedPreferences.getInstance();
   final List<String>? items = prefs.getStringList('Cities');
-  return items!.toList();
+  if (items == null){
+    return [''];
+  }
+  return items.toList();
 }
 
-var lenght = 0;
+
 
 Future<void> getCountData() async {
   final prefs = await SharedPreferences.getInstance();
-  var result = prefs.getStringList('Cities')!.length;
-  lenght = result.toInt();
+  if (lengthCityList != 0) {
+    var result = prefs.getStringList('Cities')!.length;
+    lengthCityList = result.toInt();
+  }
 }
