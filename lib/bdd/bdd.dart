@@ -53,7 +53,6 @@ Future<void> writeData(String name) async {
 Future<void> deleteData(String name) async {
   final prefs = await SharedPreferences.getInstance();
   final List<String>? items = prefs.getStringList('Cities') ?? [];
-  ;
   if (items?.length != null) {
     for (int i = 0; i < items!.length; i++) {
       if (items[i] == name) {
