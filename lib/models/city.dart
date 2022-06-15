@@ -84,6 +84,7 @@ class Coord {
   double? lon;
   double? lat;
 
+
   Coord({this.lon, this.lat});
 
   Coord.fromJson(Map<String, dynamic> json) {
@@ -125,10 +126,10 @@ class Weather {
 }
 
 class Main {
-  double? temp;
-  double? feelsLike;
-  double? tempMin;
-  double? tempMax;
+  num? temp;
+  num? feelsLike;
+  num? tempMin;
+  num? tempMax;
   int? pressure;
   int? humidity;
 

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:kway/models/city.dart';
+import 'package:kway/models/dailyWeather.dart';
 import 'package:kway/bdd/bdd.dart';
 import 'package:kway/services/service_city.dart';
+import 'package:kway/services/service_dailyWeather.dart';
 import 'package:jiffy/jiffy.dart';
 
 void main() {
@@ -49,6 +51,8 @@ class _MyHomePageState extends State<MyHomePage> {
     'Nov',
     'Dec',
   ];
+
+  final coords = <double?>[0,0];
   
   String town = 'Lyon';
 
@@ -186,13 +190,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
               ),
             ),
-            //Une row contiens une ville stocker
+            //Une row contiens une ville stocké
             FutureBuilder<List<String>>(
               future: getAllData(),
               builder: (context, snapshot) {
                 //Pendant que le chargement ce fait
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: Text("Chargement..."));
+                  return const Center(child: Text("Loading..."));
                   //Une fois que le chargement est fini
                 } else if (snapshot.connectionState == ConnectionState.done) {
                   return ListView.builder(
@@ -236,10 +240,12 @@ class _MyHomePageState extends State<MyHomePage> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
-              child: Text('Une erreur est survenue'),
+              child: Text('Loading...'),
             );
           } else if (snapshot.connectionState == ConnectionState.done) {
             // Afficher la page normale
+            coords[0] = snapshot.data!.coord!.lon;
+            coords[1] = snapshot.data!.coord!.lat;
             return Column(
               children: <Widget>[
                 Row(
@@ -263,8 +269,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: <Widget>[
                                       Text(
                                         Jiffy().EEEE,
@@ -304,7 +309,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                               MainAxisAlignment.start,
                                           children: <Widget>[
                                             Image.network(
-                                              'https://cdn-icons-png.flaticon.com/512/1163/1163661.png',
+                                              'https://openweathermap.org/img/wn/${snapshot.data!.weather![0].icon}@2x.png',
                                               width: 40.0,
                                               height: 40.0,
                                             ),
@@ -356,109 +361,41 @@ class _MyHomePageState extends State<MyHomePage> {
                   ],
                 ),
                 Row(
-                  children: const <Widget>[
-                    // Expanded(
-                    //   child: ListView(
-                    //   scrollDirection: Axis.horizontal,
-                    //   shrinkWrap: true,
-                    //   children: const <Widget>[
-                    //     Card(
-                    //       child : Text('Hour'),
-                    //     ),
-                    //     Card(
-                    //       child : Text('Hour'),
-                    //     ),
-                    //     Card(
-                    //       child : Text('Hour'),
-                    //     ),
-                    //     Card(
-                    //       child : Text('Hour'),
-                    //     ),
-                    //     Card(
-                    //       child : Text('Hour'),
-                    //     ),
-                    //     Card(
-                    //       child : Text('Hour'),
-                    //     ),
-                    //     Card(
-                    //       child : Text('Hour'),
-                    //     ),
-                    //     Card(
-                    //       child : Text('Hour'),
-                    //     ),
-                    //     Card(
-                    //       child : Text('Hour'),
-                    //     ),
-                    //     Card(
-                    //       child : Text('Hour'),
-                    //     ),
-                    //     Card(
-                    //       child : Text('Hour'),
-                    //     ),
-                    //     Card(
-                    //       child : Text('Hour'),
-                    //     ),
-                    //     Card(
-                    //       child : Text('Hour'),
-                    //     ),
-                    //     Card(
-                    //       child : Text('Hour'),
-                    //     ),
-                    //   ],
-                    // ),
-                    // ),
-                  ],
-                ),
-                Row(children: const <Widget>[
-                  // ListView(
-                  //   scrollDirection: Axis.horizontal,
-                  //   children : const <Widget>[
-                  // Card(
-                  //   child : Text('Hour'),
-                  // ),
-                  // Card(
-                  //   child : Text('Hour'),
-                  // ),
-                  // Card(
-                  //   child : Text('Hour'),
-                  // ),
-                  // Card(
-                  //   child : Text('Hour'),
-                  // ),
-                  // Card(
-                  //   child : Text('Hour'),
-                  // ),
-                  // Card(
-                  //   child : Text('Hour'),
-                  // ),
-                  // Card(
-                  //   child : Text('Hour'),
-                  // ),
-                  // Card(
-                  //   child : Text('Hour'),
-                  // ),
-                  // Card(
-                  //   child : Text('Hour'),
-                  // ),
-                  // Card(
-                  //   child : Text('Hour'),
-                  // ),
-                  // Card(
-                  //   child : Text('Hour'),
-                  // ),
-                  // Card(
-                  //   child : Text('Hour'),
-                  // ),
-                  // Card(
-                  //   child : Text('Hour'),
-                  // ),
-                  // Card(
-                  //   child : Text('Hour'),
-                  // ),
-                  // ],
-                  // ),
-                ]),
-              ],
+                  children: <Widget>[
+                      FutureBuilder<List<Daily>>(
+                        future: getDailyWeather(coords[0], coords[1]),
+                        builder : (context, snapshot) {
+                          //Pendant que le chargement ce fait
+                          if (snapshot.connectionState == ConnectionState.waiting) {
+                            return const Center(child: Text("Chargement..."));
+                            //Une fois que le chargement est fini
+                          } else if (snapshot.connectionState == ConnectionState.done) {
+                            return SizedBox(
+                              width : 392,
+                              height : 400,
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: snapshot.data!.length,
+                                itemBuilder: (context,index) {
+                                  var date = DateTime.fromMillisecondsSinceEpoch(snapshot.data![index].dt! * 1000);
+                                  return ListTile(
+                                    title: Text('${Jiffy(date).EEEE}, ${date.weekday} ${month[date.month-1]}, ${date.year}'),
+                                    subtitle: Text('${snapshot.data![index].temp!.day!.round().toString()}°C'),
+                                    trailing: Image.network(
+                                      'https://openweathermap.org/img/wn/${snapshot.data![index].weather![0].icon}@2x.png'
+                                    ),
+                                  );
+                                },
+                              ),
+                            );
+                          }else {
+                            return const Center(child: Text('Une erreur est survenue'));
+                          }
+                        }
+                      )
+                    ]
+                  ),
+              ]
             );
           } else {
             return const Center(
