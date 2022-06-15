@@ -396,9 +396,10 @@ class _MyHomePageState extends State<MyHomePage> {
             ]);
           } else {
             return const Center(
-              child: Text(
-                  'Une erreur est survenue, vérifier votre nom de ville, il est aussi possible que nous ne trouvions pas la ville :/'),
-            );
+                child: Text(
+              'Une erreur est survenue, vérifier votre nom de ville, il est aussi possible que nous ne trouvions pas la ville :/',
+              textAlign: TextAlign.center,
+            ));
           }
         },
       ),
