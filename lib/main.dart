@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kway/models/city.dart';
 import 'package:kway/bdd/bdd.dart';
 import 'package:kway/services/service_city.dart';
+import 'package:jiffy/jiffy.dart';
 
 void main() {
   runApp(const MyApp());
@@ -247,7 +248,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     crossAxisAlignment : CrossAxisAlignment.start,
                                     children: <Widget>[
                                       Text(
-                                        day[DateTime.now().weekday],
+                                        Jiffy().EEEE,
                                         style: const TextStyle(color: Colors.white),
                                         textAlign: TextAlign.left,
                                       ),

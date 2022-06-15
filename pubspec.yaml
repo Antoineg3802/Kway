@@ -38,6 +38,7 @@ dependencies:
   http: ^0.13.4
   path: ^1.8.1
   shared_preferences: ^2.0.15
+  jiffy: ^5.0.0
 
 dev_dependencies:
   flutter_test:
