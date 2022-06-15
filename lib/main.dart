@@ -49,15 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
     'Nov',
     'Dec',
   ];
-  final day = <String>[
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday',
-    'Sunday'
-  ];
+  
   String town = 'Lyon';
 
   void updateTown(String city) {
@@ -275,7 +267,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                         CrossAxisAlignment.start,
                                     children: <Widget>[
                                       Text(
-                                        day[DateTime.now().weekday],
+                                        Jiffy().EEEE,
                                         style: const TextStyle(
                                             color: Colors.white),
                                         textAlign: TextAlign.left,
