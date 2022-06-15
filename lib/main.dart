@@ -379,7 +379,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 itemBuilder: (context,index) {
                                   var date = DateTime.fromMillisecondsSinceEpoch(snapshot.data![index].dt! * 1000);
                                   return ListTile(
-                                    title: Text('${Jiffy(date).EEEE}, ${date.weekday} ${month[date.month-1]}, ${date.year}'),
+                                    title: Text('${Jiffy(date).EEEE}, ${date.day} ${month[date.month-1]}, ${date.year}'),
                                     subtitle: Text('${snapshot.data![index].temp!.day!.round().toString()}°C'),
                                     trailing: Image.network(
                                       'https://openweathermap.org/img/wn/${snapshot.data![index].weather![0].icon}@2x.png'

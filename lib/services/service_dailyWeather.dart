@@ -14,7 +14,7 @@ Future<List<Daily>> getDailyWeather(double? lon, double? lat) async {
   if (response.statusCode == 200) {
     final jsonResponse = jsonDecode(response.body);
     var dailyWeather = DailyWeather.fromJson(jsonResponse);
-    for(var i = 0; i < 7 ; i++) {
+    for(var i = 1; i < 8 ; i++) {
       dailyWeatherList.add(dailyWeather.daily![i]);
     }
 
