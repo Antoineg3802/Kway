@@ -74,8 +74,6 @@ Future<List<String>> getAllData() async {
 
 Future<void> getCountData() async {
   final prefs = await SharedPreferences.getInstance();
-  if (lengthCityList != 0) {
-    var result = prefs.getStringList('Cities')!.length;
-    lengthCityList = result.toInt();
-  }
+  var result = prefs.getStringList('Cities')!.length;
+  lengthCityList = result.toInt();
 }

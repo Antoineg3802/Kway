@@ -52,8 +52,8 @@ class _MyHomePageState extends State<MyHomePage> {
     'Dec',
   ];
 
-  final coords = <double?>[0,0];
-  
+  final coords = <double?>[0, 0];
+
   String town = 'Lyon';
 
   void updateTown(String city) {
@@ -175,7 +175,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                             addCity();
                                             getCountData();
                                             UpdateCityCount();
-                                            print(lengthCityList);
+                                            //print(lengthCityList);
                                             Navigator.pop(context);
                                           }),
                                     )
@@ -242,164 +242,162 @@ class _MyHomePageState extends State<MyHomePage> {
             return const Center(
               child: Text('Loading...'),
             );
-          } else if (snapshot.connectionState == ConnectionState.done) {
+          } else if (snapshot.connectionState == ConnectionState.done &&
+              isDetectable == true) {
             // Afficher la page normale
             coords[0] = snapshot.data!.coord!.lon;
             coords[1] = snapshot.data!.coord!.lat;
-            return Column(
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Container(
-                      width: 350,
-                      height: 200,
-                      padding: const EdgeInsets.all(10.0),
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        color: Colors.blue[300],
-                        child: Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Row(
-                            children: [
-                              SizedBox(
-                                width: 149,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Text(
-                                        Jiffy().EEEE,
-                                        style: const TextStyle(
-                                            color: Colors.white),
-                                        textAlign: TextAlign.left,
-                                      ),
-                                      Text(
-                                        '${DateTime.now().day.toString()} ${month[DateTime.now().month - 1]}, ${DateTime.now().year.toString()}',
-                                        style: const TextStyle(
-                                            color: Colors.white),
-                                        textAlign: TextAlign.left,
-                                      ),
-                                      Text(
-                                        '${DateTime.now().toLocal().hour.toString()}:${DateTime.now().toLocal().minute.toString()}',
-                                        style: const TextStyle(
-                                            color: Colors.white),
-                                        textAlign: TextAlign.left,
-                                      ),
-                                      Container(
-                                        margin: const EdgeInsets.only(
-                                            left: 17.0, top: 17.0),
-                                        padding: const EdgeInsets.all(10.0),
-                                        width: 130,
-                                        height: 50,
-                                        decoration: BoxDecoration(
-                                          color: Colors.blue[300],
-                                          border: Border.all(
-                                            color: Colors.white,
-                                            width: 1,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: <Widget>[
-                                            Image.network(
-                                              'https://openweathermap.org/img/wn/${snapshot.data!.weather![0].icon}@2x.png',
-                                              width: 40.0,
-                                              height: 40.0,
-                                            ),
-                                            Text(
-                                              snapshot.data!.weather![0].main
-                                                  .toString(),
-                                              style: const TextStyle(
-                                                  color: Colors.white),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                width: 149,
+            return Column(children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    width: 350,
+                    height: 200,
+                    padding: const EdgeInsets.all(10.0),
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      color: Colors.blue[300],
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: 149,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
                                 child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     Text(
-                                      '${snapshot.data!.main!.temp!.round().toString()}°C',
-                                      style: const TextStyle(
-                                          color: Colors.white, fontSize: 25),
-                                      textAlign: TextAlign.left,
-                                    ),
-                                    Text(
-                                      'Humidity : ${snapshot.data!.main!.humidity.toString()} %',
+                                      Jiffy().EEEE,
                                       style:
                                           const TextStyle(color: Colors.white),
                                       textAlign: TextAlign.left,
                                     ),
                                     Text(
-                                      'Wind : ${snapshot.data!.wind!.speed.toString()} m/s',
+                                      '${DateTime.now().day.toString()} ${month[DateTime.now().month - 1]}, ${DateTime.now().year.toString()}',
                                       style:
                                           const TextStyle(color: Colors.white),
                                       textAlign: TextAlign.left,
+                                    ),
+                                    Text(
+                                      '${DateTime.now().toLocal().hour.toString()}:${DateTime.now().toLocal().minute.toString()}',
+                                      style:
+                                          const TextStyle(color: Colors.white),
+                                      textAlign: TextAlign.left,
+                                    ),
+                                    Container(
+                                      margin: const EdgeInsets.only(
+                                          left: 17.0, top: 17.0),
+                                      padding: const EdgeInsets.all(10.0),
+                                      width: 130,
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                        color: Colors.blue[300],
+                                        border: Border.all(
+                                          color: Colors.white,
+                                          width: 1,
+                                        ),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: <Widget>[
+                                          Image.network(
+                                            'https://openweathermap.org/img/wn/${snapshot.data!.weather![0].icon}@2x.png',
+                                            width: 40.0,
+                                            height: 40.0,
+                                          ),
+                                          Text(
+                                            snapshot.data!.weather![0].main
+                                                .toString(),
+                                            style: const TextStyle(
+                                                color: Colors.white),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ],
                                 ),
-                              )
-                            ],
-                          ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 149,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Text(
+                                    '${snapshot.data!.main!.temp!.round().toString()}°C',
+                                    style: const TextStyle(
+                                        color: Colors.white, fontSize: 25),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                  Text(
+                                    'Humidity : ${snapshot.data!.main!.humidity.toString()} %',
+                                    style: const TextStyle(color: Colors.white),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                  Text(
+                                    'Wind : ${snapshot.data!.wind!.speed.toString()} m/s',
+                                    style: const TextStyle(color: Colors.white),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
                         ),
                       ),
                     ),
-                  ],
-                ),
-                Row(
-                  children: <Widget>[
-                      FutureBuilder<List<Daily>>(
-                        future: getDailyWeather(coords[0], coords[1]),
-                        builder : (context, snapshot) {
-                          //Pendant que le chargement ce fait
-                          if (snapshot.connectionState == ConnectionState.waiting) {
-                            return const Center(child: Text("Chargement..."));
-                            //Une fois que le chargement est fini
-                          } else if (snapshot.connectionState == ConnectionState.done) {
-                            return SizedBox(
-                              width : 392,
-                              height : 400,
-                              child: ListView.builder(
-                                shrinkWrap: true,
-                                itemCount: snapshot.data!.length,
-                                itemBuilder: (context,index) {
-                                  var date = DateTime.fromMillisecondsSinceEpoch(snapshot.data![index].dt! * 1000);
-                                  return ListTile(
-                                    title: Text('${Jiffy(date).EEEE}, ${date.day} ${month[date.month-1]}, ${date.year}'),
-                                    subtitle: Text('${snapshot.data![index].temp!.day!.round().toString()}°C'),
-                                    trailing: Image.network(
-                                      'https://openweathermap.org/img/wn/${snapshot.data![index].weather![0].icon}@2x.png'
-                                    ),
-                                  );
-                                },
-                              ),
-                            );
-                          }else {
-                            return const Center(child: Text('Une erreur est survenue'));
-                          }
-                        }
-                      )
-                    ]
                   ),
-              ]
-            );
+                ],
+              ),
+              Row(children: <Widget>[
+                FutureBuilder<List<Daily>>(
+                    future: getDailyWeather(coords[0], coords[1]),
+                    builder: (context, snapshot) {
+                      //Pendant que le chargement ce fait
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: Text("Chargement..."));
+                        //Une fois que le chargement est fini
+                      } else if (snapshot.connectionState ==
+                          ConnectionState.done) {
+                        return SizedBox(
+                          width: 392,
+                          height: 400,
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: snapshot.data!.length,
+                            itemBuilder: (context, index) {
+                              var date = DateTime.fromMillisecondsSinceEpoch(
+                                  snapshot.data![index].dt! * 1000);
+                              return ListTile(
+                                title: Text(
+                                    '${Jiffy(date).EEEE}, ${date.day} ${month[date.month - 1]}, ${date.year}'),
+                                subtitle: Text(
+                                    '${snapshot.data![index].temp!.day!.round().toString()}°C'),
+                                trailing: Image.network(
+                                    'https://openweathermap.org/img/wn/${snapshot.data![index].weather![0].icon}@2x.png'),
+                              );
+                            },
+                          ),
+                        );
+                      } else {
+                        return const Center(
+                            child: Text('Une erreur est survenue'));
+                      }
+                    })
+              ]),
+            ]);
           } else {
             return const Center(
-              child: Text('Une erreur est survenue'),
+              child: Text(
+                  'Une erreur est survenue, vérifier votre nom de ville, il est aussi possible que nous ne trouvions pas la ville :/'),
             );
           }
         },

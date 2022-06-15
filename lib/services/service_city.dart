@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:kway/models/city.dart';
 import 'package:http/http.dart' as http;
 
+var isDetectable = true;
 //Fonction d'appel à l'api de la météo de paris
 Future<City> getCityData(String name) async {
   var city;
@@ -13,6 +14,10 @@ Future<City> getCityData(String name) async {
     var jsonResponse = jsonDecode(response.body);
     city = City.fromJson(jsonResponse);
   } else if (response.statusCode == 404) {
+    print("Enter an other City because it not exist or we don't found it :/");
+    isDetectable = false;
+    // var jsonResponse = null;
+    // city = City.fromJson(jsonResponse);
   } else {
     print('Reponse fail with status methode : ${response.statusCode}');
   }
