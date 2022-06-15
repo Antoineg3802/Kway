@@ -43,7 +43,7 @@ Future<void> writeData(String name) async {
   final List<String>? items = prefs.getStringList('Cities');
   if (items == null) {
     await prefs.setStringList('Cities', <String>[name]);
-    lengthCityList++;
+    lengthCityList = 1;
   } else {
     items.add(name);
     await prefs.setStringList('Cities', items);
@@ -66,13 +66,11 @@ Future<void> deleteData(String name) async {
 Future<List<String>> getAllData() async {
   final prefs = await SharedPreferences.getInstance();
   final List<String>? items = prefs.getStringList('Cities');
-  if (items == null){
+  if (items == null) {
     return [''];
   }
   return items.toList();
 }
-
-
 
 Future<void> getCountData() async {
   final prefs = await SharedPreferences.getInstance();

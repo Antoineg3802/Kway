@@ -12,6 +12,7 @@ Future<City> getCityData(String name) async {
   if (response.statusCode == 200) {
     var jsonResponse = jsonDecode(response.body);
     user = City.fromJson(jsonResponse);
+  } else if (response.statusCode == 404) {
   } else {
     print('Reponse fail with status methode : ${response.statusCode}');
   }

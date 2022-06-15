@@ -31,19 +31,39 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  
   final _formKey = GlobalKey<FormState>();
   var cityName = TextEditingController();
   final prefs = getAllData();
-  
-  final month = <String> ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', ];
-  final day = <String> ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+  final month = <String>[
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
+  final day = <String>[
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday'
+  ];
   String town = 'Lyon';
 
   void updateTown(String city) {
-    setState(()=>{
-      town = city,
-    });
+    setState(() => {
+          town = city,
+        });
   }
 
   @override
@@ -52,7 +72,13 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
   }
 
-  void addCity() async {
+  void UpdateCityCount() {
+    setState(() {
+      lengthCityList;
+    });
+  }
+
+  addCity() async {
     setState(() {
       if (cityName.text != "") {
         writeData(cityName.text);
@@ -93,7 +119,6 @@ class _MyHomePageState extends State<MyHomePage> {
         });
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -107,8 +132,7 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             //L'header du drawer
             DrawerHeader(
-              decoration: const BoxDecoration(
-              ),
+              decoration: const BoxDecoration(color: Colors.blueAccent),
               child: Column(
                 children: [
                   //Le titre
@@ -153,6 +177,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                           child: Text("Submit"),
                                           onPressed: () {
                                             addCity();
+                                            getCountData();
+                                            UpdateCityCount();
+                                            print(lengthCityList);
                                             Navigator.pop(context);
                                           }),
                                     )
@@ -189,9 +216,8 @@ class _MyHomePageState extends State<MyHomePage> {
                               leading: const Icon(Icons.location_city),
                               title: TextButton(
                                 child: Text(snapshot.data![index]),
-                                onPressed: () => {
-                                  // Quand la ville est séléctionné
-                                },
+                                onPressed: () =>
+                                    {updateTown(snapshot.data![index])},
                               ),
                             )),
                             IconButton(
@@ -213,21 +239,21 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       //Tout l'interieur du body (de la page d'acceuil)
-      body:FutureBuilder<City>(
+      body: FutureBuilder<City>(
         future: getCityData(town),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
               child: Text('Une erreur est survenue'),
             );
-          }else if (snapshot.connectionState == ConnectionState.done){
+          } else if (snapshot.connectionState == ConnectionState.done) {
             // Afficher la page normale
             return Column(
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Container(
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
                       width: 350,
                       height: 200,
                       padding: const EdgeInsets.all(10.0),
@@ -245,25 +271,30 @@ class _MyHomePageState extends State<MyHomePage> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Column(
-                                    crossAxisAlignment : CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: <Widget>[
                                       Text(
-                                        Jiffy().EEEE,
-                                        style: const TextStyle(color: Colors.white),
+                                        day[DateTime.now().weekday],
+                                        style: const TextStyle(
+                                            color: Colors.white),
                                         textAlign: TextAlign.left,
                                       ),
                                       Text(
-                                        '${DateTime.now().day.toString()} ${month[DateTime.now().month - 1]}, ${DateTime.now().year.toString()}', 
-                                        style: const TextStyle(color: Colors.white),
+                                        '${DateTime.now().day.toString()} ${month[DateTime.now().month - 1]}, ${DateTime.now().year.toString()}',
+                                        style: const TextStyle(
+                                            color: Colors.white),
                                         textAlign: TextAlign.left,
                                       ),
                                       Text(
-                                        '${DateTime.now().toLocal().hour.toString()}:${DateTime.now().toLocal().minute.toString()}', 
-                                        style: const TextStyle(color: Colors.white),
+                                        '${DateTime.now().toLocal().hour.toString()}:${DateTime.now().toLocal().minute.toString()}',
+                                        style: const TextStyle(
+                                            color: Colors.white),
                                         textAlign: TextAlign.left,
                                       ),
                                       Container(
-                                        margin: const EdgeInsets.only(left: 17.0, top: 17.0),
+                                        margin: const EdgeInsets.only(
+                                            left: 17.0, top: 17.0),
                                         padding: const EdgeInsets.all(10.0),
                                         width: 130,
                                         height: 50,
@@ -273,10 +304,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                             color: Colors.white,
                                             width: 1,
                                           ),
-                                          borderRadius: BorderRadius.circular(10),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                         ),
-                                        child : Row(
-                                          mainAxisAlignment: MainAxisAlignment.start,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
                                           children: <Widget>[
                                             Image.network(
                                               'https://cdn-icons-png.flaticon.com/512/1163/1163661.png',
@@ -284,8 +317,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                               height: 40.0,
                                             ),
                                             Text(
-                                              snapshot.data!.weather![0].main.toString(),
-                                              style: const TextStyle(color: Colors.white),
+                                              snapshot.data!.weather![0].main
+                                                  .toString(),
+                                              style: const TextStyle(
+                                                  color: Colors.white),
                                             ),
                                           ],
                                         ),
@@ -297,22 +332,25 @@ class _MyHomePageState extends State<MyHomePage> {
                               SizedBox(
                                 width: 149,
                                 child: Column(
-                                  crossAxisAlignment : CrossAxisAlignment.center,
-                                  mainAxisAlignment : MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: <Widget>[
                                     Text(
-                                      '${snapshot.data!.main!.temp!.round().toString()}°C', 
-                                      style:const TextStyle(color: Colors.white,fontSize: 25),
+                                      '${snapshot.data!.main!.temp!.round().toString()}°C',
+                                      style: const TextStyle(
+                                          color: Colors.white, fontSize: 25),
                                       textAlign: TextAlign.left,
                                     ),
                                     Text(
-                                      'Humidity : ${snapshot.data!.main!.humidity.toString()} %', 
-                                      style: const TextStyle(color: Colors.white),
+                                      'Humidity : ${snapshot.data!.main!.humidity.toString()} %',
+                                      style:
+                                          const TextStyle(color: Colors.white),
                                       textAlign: TextAlign.left,
                                     ),
                                     Text(
-                                      'Wind : ${snapshot.data!.wind!.speed.toString()} m/s', 
-                                      style: const TextStyle(color: Colors.white),
+                                      'Wind : ${snapshot.data!.wind!.speed.toString()} m/s',
+                                      style:
+                                          const TextStyle(color: Colors.white),
                                       textAlign: TextAlign.left,
                                     ),
                                   ],
@@ -333,106 +371,104 @@ class _MyHomePageState extends State<MyHomePage> {
                     //   shrinkWrap: true,
                     //   children: const <Widget>[
                     //     Card(
-                    //       child : Text('Hour'),  
+                    //       child : Text('Hour'),
                     //     ),
                     //     Card(
-                    //       child : Text('Hour'),  
+                    //       child : Text('Hour'),
                     //     ),
                     //     Card(
-                    //       child : Text('Hour'),  
+                    //       child : Text('Hour'),
                     //     ),
                     //     Card(
-                    //       child : Text('Hour'),  
+                    //       child : Text('Hour'),
                     //     ),
                     //     Card(
-                    //       child : Text('Hour'),  
+                    //       child : Text('Hour'),
                     //     ),
                     //     Card(
-                    //       child : Text('Hour'),  
+                    //       child : Text('Hour'),
                     //     ),
                     //     Card(
-                    //       child : Text('Hour'),  
+                    //       child : Text('Hour'),
                     //     ),
                     //     Card(
-                    //       child : Text('Hour'),  
+                    //       child : Text('Hour'),
                     //     ),
                     //     Card(
-                    //       child : Text('Hour'),  
+                    //       child : Text('Hour'),
                     //     ),
                     //     Card(
-                    //       child : Text('Hour'),  
+                    //       child : Text('Hour'),
                     //     ),
                     //     Card(
-                    //       child : Text('Hour'),  
+                    //       child : Text('Hour'),
                     //     ),
                     //     Card(
-                    //       child : Text('Hour'),  
+                    //       child : Text('Hour'),
                     //     ),
                     //     Card(
-                    //       child : Text('Hour'),  
+                    //       child : Text('Hour'),
                     //     ),
                     //     Card(
-                    //       child : Text('Hour'),  
+                    //       child : Text('Hour'),
                     //     ),
                     //   ],
                     // ),
                     // ),
                   ],
                 ),
-                Row(
-                  children : const <Widget>[
-                    // ListView(
-                    //   scrollDirection: Axis.horizontal,
-                    //   children : const <Widget>[
-                        // Card(
-                        //   child : Text('Hour'),  
-                        // ),
-                        // Card(
-                        //   child : Text('Hour'),  
-                        // ),
-                        // Card(
-                        //   child : Text('Hour'),  
-                        // ),
-                        // Card(
-                        //   child : Text('Hour'),  
-                        // ),
-                        // Card(
-                        //   child : Text('Hour'),  
-                        // ),
-                        // Card(
-                        //   child : Text('Hour'),  
-                        // ),
-                        // Card(
-                        //   child : Text('Hour'),  
-                        // ),
-                        // Card(
-                        //   child : Text('Hour'),  
-                        // ),
-                        // Card(
-                        //   child : Text('Hour'),  
-                        // ),
-                        // Card(
-                        //   child : Text('Hour'),  
-                        // ),
-                        // Card(
-                        //   child : Text('Hour'),  
-                        // ),
-                        // Card(
-                        //   child : Text('Hour'),  
-                        // ),
-                        // Card(
-                        //   child : Text('Hour'),  
-                        // ),
-                        // Card(
-                        //   child : Text('Hour'),  
-                        // ),
-                      // ],
-                    // ),
-                  ]
-                ),
+                Row(children: const <Widget>[
+                  // ListView(
+                  //   scrollDirection: Axis.horizontal,
+                  //   children : const <Widget>[
+                  // Card(
+                  //   child : Text('Hour'),
+                  // ),
+                  // Card(
+                  //   child : Text('Hour'),
+                  // ),
+                  // Card(
+                  //   child : Text('Hour'),
+                  // ),
+                  // Card(
+                  //   child : Text('Hour'),
+                  // ),
+                  // Card(
+                  //   child : Text('Hour'),
+                  // ),
+                  // Card(
+                  //   child : Text('Hour'),
+                  // ),
+                  // Card(
+                  //   child : Text('Hour'),
+                  // ),
+                  // Card(
+                  //   child : Text('Hour'),
+                  // ),
+                  // Card(
+                  //   child : Text('Hour'),
+                  // ),
+                  // Card(
+                  //   child : Text('Hour'),
+                  // ),
+                  // Card(
+                  //   child : Text('Hour'),
+                  // ),
+                  // Card(
+                  //   child : Text('Hour'),
+                  // ),
+                  // Card(
+                  //   child : Text('Hour'),
+                  // ),
+                  // Card(
+                  //   child : Text('Hour'),
+                  // ),
+                  // ],
+                  // ),
+                ]),
               ],
             );
-          }else {
+          } else {
             return const Center(
               child: Text('Une erreur est survenue'),
             );
